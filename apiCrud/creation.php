@@ -13,7 +13,7 @@ if($data->id){
    $run2 = mysqli_query($db,$query2);
    $product = mysqli_fetch_assoc($run2);
 
-   
+   // print_r($product);die();
    // Check the given "id" is available or not
    if($product =="" ){ 
 
@@ -26,8 +26,8 @@ if($data->id){
    $discount = $product['discount'];
 
   
-   // These are validation for checking user enter value for updata or assign to it previous value. 
-   
+   // These are validation for checking user enter updated value or assing 
+   // to it previous values.
 
    if($data->product_name!=""){
        $product_name = $data->product_name;
@@ -44,13 +44,11 @@ if($data->id){
        $discount = $data->discount;
     }
 
+
+    $query = "UPDATE products SET product_name='$product_name',product_price='$product_price',stock='$stock',discount='$discount'WHERE id= ".$data->id;
+
   
-   
-       $query = "UPDATE products SET ";
-       $query.= "product_name='$product_name',";
-       $query.= "product_price='$product_price',";
-       $query.= "stock='$stock',";
-       $query.= "discount='$discount' WHERE id=".$data->id;
+  
        $run = mysqli_query($db,$query);
    
    if($run){
@@ -65,32 +63,22 @@ if($data->id){
 }else{
 
 // These are validation for creating a new product which check there is 
-// value which are not provided and  through error.If all values are given by user then it added as new product in database.
+// value which are not provided through error.
 
+if($data->product_name==""&& $data->product_price==""&& $data->stock =="" && $data->discount==""){
+   echo json_encode(["status"=>"failed some field is missing",]);
+}else{
 
- if($data->product_name==""){
-    echo json_encode(["status"=>"failed","product_name"=>"is empty"]);
- }elseif($data->product_price==""){
-    echo json_encode(["status"=>"failed","product_name"=>"is empty"]);
- }
- elseif($data->stock == ""){
-    echo json_encode(["status"=>"failed","product_name"=>"is empty"]);
- }elseif($data->discount ==""){
-    echo json_encode(["status"=>"failed","product_name"=>"is empty"]);
- }else{
-
-    $query = "INSERT INTO products(product_name,product_price,stock,discount)Values('$data->product_name','$data->product_price','$data->stock','$data->discount')";
+   $query = "INSERT INTO products(product_name,product_price,stock,discount)Values('$data->product_name','$data->product_price','$data->stock','$data->discount')";
 $run = mysqli_query($db,$query);
 
 if($run){
-    echo json_encode(["status"=> "success","msg"=>"product Added"]);
+   echo json_encode(["status"=> "success","msg"=>"product Added"]);
 
 }else{
-    echo json_encode(["status"=>"failed"]);
+   echo json_encode(["status"=>"failed"]);
 }
 
- }
+} 
 }
-
-
 ?>
