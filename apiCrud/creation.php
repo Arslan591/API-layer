@@ -13,14 +13,21 @@ if($data->id){
    $run2 = mysqli_query($db,$query2);
    $product = mysqli_fetch_assoc($run2);
 
+   
+   // Check the given "id" is available or not
+   if($product =="" ){ 
+
+      echo"given id is not available";
+    }else{
+
    $product_name = $product['product_name'];
    $product_price = $product['product_price'];
    $stock = $product['stock'];
    $discount = $product['discount'];
 
   
-   // These are validation for checking user enter updated value or assing 
-   // to it previous values.
+   // These are validation for checking user enter value for updata or assign to it previous value. 
+   
 
    if($data->product_name!=""){
        $product_name = $data->product_name;
@@ -51,14 +58,14 @@ if($data->id){
    
    }else{
        echo json_encode(["status"=>"is not updated"]);
-   }
+   }}
    
     
 
 }else{
 
 // These are validation for creating a new product which check there is 
-// value which are not provided through error.
+// value which are not provided and  through error.If all values are given by user then it added as new product in database.
 
 
  if($data->product_name==""){
